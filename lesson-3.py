@@ -4,6 +4,7 @@ import random
 # 1/2
 def num_translate_adv(number_eng: str):
     numbers = {
+        'zero': 'ноль',
         'one': 'один',
         'two': 'два',
         'three': 'три',
