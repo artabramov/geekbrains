@@ -1,0 +1,1 @@
+mysqldump -u root -p mysql --opt --where="1 limit 100" help_keyword > database.sql

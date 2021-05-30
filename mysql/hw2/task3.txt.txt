@@ -1,0 +1,2 @@
+mysqldump -u root -p example > dump.sql
+mysqldump -u root -p sample < dump.sql
