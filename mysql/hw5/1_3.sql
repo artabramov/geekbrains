@@ -1,0 +1,1 @@
+SELECT * FROM storehouses_products ORDER BY value, value=0;

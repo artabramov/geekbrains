@@ -1,0 +1,1 @@
+UPDATE users SET created_at=str_to_date(created_at, '%d-%m-%Y'), updated_at=str_to_date(updated_at, '%d-%m-%Y');
