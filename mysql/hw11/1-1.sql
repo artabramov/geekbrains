@@ -7,21 +7,21 @@ create table logs (
 ) ENGINE=ARCHIVE CHARACTER SET utf8;
 
 DELIMITER $$
-CREATE TRIGGER t_users BEFORE INSERT ON users
+CREATE TRIGGER t_users AFTER INSERT ON users
 FOR EACH ROW BEGIN
     INSERT INTO logs (table_name, table_id, name) VALUES ('users', NEW.id, NEW.name);
 END$$
 DELIMITER ;
 
 DELIMITER $$
-CREATE TRIGGER t_catalogs BEFORE INSERT ON catalogs
+CREATE TRIGGER t_catalogs AFTER INSERT ON catalogs
 FOR EACH ROW BEGIN
     INSERT INTO logs (table_name, table_id, name) VALUES ('catalogs', NEW.id, NEW.name);
 END$$
 DELIMITER ;
 
 DELIMITER $$
-CREATE TRIGGER t_products BEFORE INSERT ON products
+CREATE TRIGGER t_products AFTER INSERT ON products
 FOR EACH ROW BEGIN
     INSERT INTO logs (table_name, table_id, name) VALUES ('products', NEW.id, NEW.name);
 END$$
