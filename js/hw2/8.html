@@ -1,0 +1,9 @@
+<script>
+function power(val, pow, res = 1) {
+    if(pow >= 1) {
+        res = power(val, --pow, res * val);
+    }
+    return res;
+}
+console.log(power(2, 8)); // 256
+</script>
