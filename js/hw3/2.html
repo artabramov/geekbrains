@@ -1,0 +1,22 @@
+<script>
+/**
+ * Products format: 0 - article (product code), 1 - product title, 
+ * 2 - product number, 3 - product price (not a total sum).
+ **/
+let cart = [
+    ["A1", "The Lord of the Rings", 1, 199.99],
+    ["A2", "To Kill a Mockingbird", 1, 89.99],
+    ["A3", "The Catcher in the Rye", 2, 79.99],
+    ["A4", "Alice's Adventures in Wonderland", 1, 69.99]
+];
+
+function countBasketPrice(cart) {
+    totalSum = 0;
+    for(let i = 0; i < cart.length; i++) {
+        totalSum += cart[i][2] * cart[i][3];
+    }
+    return totalSum;
+}
+
+console.log(countBasketPrice(cart));
+</script>
