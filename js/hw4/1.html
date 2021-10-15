@@ -1,0 +1,21 @@
+<script>
+function getNumber(number) {
+
+    if(typeof number != 'number' || number < 0 || number > 999) {
+        console.log('number is incorrect');
+        return {};
+    }
+
+    let hundereds = Math.floor(number/100);
+    let dozens = Math.floor((number - hundereds * 100) / 10);
+    let ones = Math.floor(number - hundereds * 100 - dozens * 10);
+
+    return {
+        'единицы': hundereds,
+        'десятки': dozens,
+        'сотни': ones,
+    }
+}
+var number = getNumber(987.123);
+console.log(number);
+</script>
