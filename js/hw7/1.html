@@ -1,0 +1,176 @@
+<body>
+    <div style="width:40%; float:left;">
+        <h3>Catalog</h3>
+        <div id="products"></div>
+    </div>
+
+    <div style="width:40%; float:left;">
+        <h3>Cart (<span id="cartSum">empty</span>) <a href="#" id="show">show</a></h3>
+        <div id="cart"></div>
+        <h3><a href="#" id="checkout" style="display:none;">checkout</a></h3>
+
+
+        <div id="order" style="display:none;">
+            <textarea placeholder="address"></textarea>
+            <br><br>
+            <textarea placeholder="comment"></textarea>
+            <br><br>
+            <button id="finish">Finish</button>
+        </div>
+
+        <div id="done" style="display:none;">
+            <h3>Done</h3>
+        </div>
+
+    </div>
+
+    <div style="clear:left;"></div>
+
+
+</body>
+
+<script>
+
+    function getRandomElement(array) {
+        return array[Math.floor(Math.random() * array.length)];
+    }
+
+    function getRandomName() {
+        let productPrefixes = ['Эпический', 'Редкий', 'Легендарный', 'Необычный', 'Обычный'];
+        let productNames = ['фолиант', 'кодекс', 'окуляр', 'фиал', 'тотем', 'оберег', 'корень', 'зонт', 'талисман', 'котел', 'бластер', 'глаз', 'свиток', 'осколок', 'горшок', 'шлем'];
+        let productSuffixes = ['бесконечного', 'божественного', 'пылающего', 'брошенного', 'испуганного', 'небесного', 'дрессированного', 'ночного', 'игрушечного', 'злобного'];
+        let productPostfixes = ['умысла', 'дракона', 'гиппогрифа', 'мула', 'господства', 'пробудителя', 'гладиатора', 'обжорства', 'некроманта', 'кровососа', 'гения', 'клоуна', 'короля', 'писателя'];
+        return getRandomElement(productPrefixes) + ' ' + getRandomElement(productNames) + ' ' + getRandomElement(productSuffixes) + ' ' + getRandomElement(productPostfixes);
+    }
+
+    function getRandomNumber() {
+        return Math.floor(Math.random() * 100) + 1;
+    }
+
+    function addRandomProducts(number) {
+        for(i=1; i<=number; i++) {
+            let name = getRandomName();
+            let price = getRandomNumber();
+            document.getElementById('products').innerHTML += `<a href="#" class="product" id=${i} data-price=${price}>${name} (${price} RUB)</a><br>`;
+        }
+    }
+
+    function addProductsListeners() {
+        let products = document.getElementsByClassName('product');
+        for(i=0; i<products.length; i++) {
+            document.getElementById(products[i].id).addEventListener('click', addProductToCart);
+        }
+    }
+   
+    function addProductToCart(event) {
+        let product = {
+            id: event.target.id,
+            name: event.target.innerText,
+            price: event.target.dataset.price,
+            number: 1,
+        };
+        cart.addProduct(product);
+        cart.printProducts();
+    }
+
+    function removeProductFromCart(id) {
+        cart.removeProduct(id);
+    }
+
+    function cartCheckout(event) {
+        showCart = !showCart;
+        cart.printProducts();
+        document.getElementById('order').style.display = 'none';
+        document.getElementById('done').style.display = 'none';
+    }
+
+    function cartOrder(event) {
+        showCart = !showCart;
+        cart.printProducts();
+        document.getElementById('order').style.display = 'inline';
+        document.getElementById('done').style.display = 'none';
+    }
+
+    function cartFinish(event) {
+        document.getElementById('order').style.display = 'none';
+        document.getElementById('done').style.display = 'inline';
+        cart.truncate();
+    }
+
+    function addCartListeners() {
+        document.getElementById('show').addEventListener('click', cartCheckout);
+        document.getElementById('checkout').addEventListener('click', cartOrder);
+        document.getElementById('finish').addEventListener('click', cartFinish);
+    }
+
+    function getCart(product) {
+        return {
+            products: [],
+            totalSum: 0,
+            addProduct: function(product) {
+                for(i=0; i<this.products.length; i++) {
+                    if(this.products[i].id == product.id) {
+                        this.products[i].number++;
+                        this.updateSum();
+                        return;
+                    }
+                }
+                this.products.push(product);
+                this.updateSum();
+            },
+            removeProduct: function(id) {
+                for(i=0; i<this.products.length; i++) {
+                    if(this.products[i].id == id) {
+                        this.products[i].number--;
+                        if(this.products[i].number <= 0) {
+                            this.products.splice(i, 1);
+                        }
+                    }
+                }
+                
+                this.updateSum();
+                cart.printProducts();
+            },
+            truncate: function() {
+                this.products = [];
+                this.updateSum();
+                cart.printProducts();
+            },
+            updateSum: function() {
+                let sum = 0;
+                for(i in this.products) {
+                     sum += parseInt(this.products[i].price) * parseInt(this.products[i].number);
+                }
+                this.totalSum = sum;
+            },
+            printProducts: function() {
+
+                if(this.products.length == 0) {
+                        document.getElementById('cartSum').innerText = 'empty';
+                } else {
+                    document.getElementById('cartSum').innerText = this.totalSum + ' RUB';
+                }
+
+                document.getElementById('cart').innerHTML = '';
+                document.getElementById('checkout').style.display = 'none';
+
+                if(showCart) {
+                    if(this.products.length > 0) {
+                        document.getElementById('checkout').style.display = 'inline';
+                    }
+                    for(i in this.products) {
+                        document.getElementById('cart').innerHTML += '<div>' + this.products[i]['name'] + ' x' + this.products[i]['number'] + ' <a href="#" onClick="removeProductFromCart(' + this.products[i]['id'] + ')">delete</a></div>';
+                    }
+                }
+            }
+        }
+    }
+
+    /* run app */
+    var showCart = false;
+    var cart = getCart();
+    addRandomProducts(20);
+    addProductsListeners();
+    addCartListeners();
+    
+</script>
