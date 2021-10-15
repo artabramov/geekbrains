@@ -1,0 +1,78 @@
+<body></body>
+<script>
+const SQUARE_WIDTH = 80;
+const SQUARE_HEIGHT = 80;
+const SQUARE_DEPTH = 40;
+const COLOR_DARK = '#696969';
+const COLOR_LIGHT = '#DCDCDC';
+const COLOR_BLACK = '#000000';
+const COLOR_WHITE = '#FFFFFF';
+const WINDOW_WIDTH = window.innerWidth;
+const WINDOW_HEIGHT = window.innerHeight;
+
+function drawSquare(x, y, width, height, text, textColor, backgroundColor, fontWeight) {
+    var square = document.createElement('div');
+    square.style.marginLeft = x;
+    square.style.marginTop = y;
+    square.style.width = width;
+    square.style.height = height;
+    square.style.color = textColor;
+    square.style.backgroundColor = backgroundColor;
+    square.style.position = 'absolute';
+
+    var comment = document.createElement('div');
+    comment.style.position = 'relative';
+    comment.style.textAlign = 'center';
+    comment.style.top = '50%';
+    comment.style.marginTop = '-0.625em';
+    comment.innerText = text;
+    comment.style.fontWeight = fontWeight;
+
+    square.append(comment);
+    document.body.append(square);
+}
+
+
+let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+
+let blackFigures = {
+    a1: 'Rook', b1: 'Knight', c1: 'Bishop', d1: 'King', e1: 'Queen', f1: 'Bishop', g1: 'Knight', h1: 'Rook',
+    a2: 'Pawn', b2: 'Pawn', c2: 'Pawn', d2: 'Pawn', e2: 'Pawn', f2: 'Pawn', g2: 'Pawn', h2: 'Pawn',
+};
+
+let whiteFigures = {
+    a7: 'Pawn', b7: 'Pawn', c7: 'Pawn', d7: 'Pawn', e7: 'Pawn', f7: 'Pawn', g7: 'Pawn', h7: 'Pawn',
+    a8: 'Rook', b8: 'Knight', c8: 'Bishop', d8: 'Queen', e8: 'King', f8: 'Bishop', g8: 'Knight', h8: 'Rook',
+};
+
+for(i in letters) {
+    drawSquare(i * SQUARE_WIDTH + SQUARE_DEPTH, 0, SQUARE_WIDTH, SQUARE_DEPTH, letters[i], COLOR_BLACK, COLOR_WHITE, 'bold');    
+}
+
+for(i=8; i>=1; i--) {
+    drawSquare(0, (8 * SQUARE_HEIGHT) - i * SQUARE_HEIGHT + SQUARE_DEPTH, SQUARE_DEPTH, SQUARE_HEIGHT, i, COLOR_BLACK, COLOR_WHITE, 'bold');    
+}
+
+let colors = [COLOR_DARK, COLOR_LIGHT];
+for(i in letters) {
+    for(j=8; j>=1; j--) {
+
+        if(blackFigures[letters[i] + (9 - j)]) {
+            figureName = blackFigures[letters[i] + (9 - j)];
+            figureColor = COLOR_BLACK;
+
+        } else if(whiteFigures[letters[i] + (9 - j)]) {
+            figureName = whiteFigures[letters[i] + (9 - j)];
+            figureColor = COLOR_WHITE;
+
+        } else {
+            figureName = '';
+            figureColor = COLOR_WHITE;
+        }
+
+        drawSquare(i * SQUARE_WIDTH + SQUARE_DEPTH, SQUARE_DEPTH + (j - 1) * SQUARE_HEIGHT, SQUARE_WIDTH, SQUARE_HEIGHT, figureName, figureColor, colors[1], 'bold');    
+        colors = [colors[1], colors[0]];
+    }
+    colors = [colors[1], colors[0]];
+}
+</script>

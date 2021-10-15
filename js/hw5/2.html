@@ -1,0 +1,88 @@
+<body>
+    <button onClick="addProduct();">add product</button>
+    <button onClick="removeProduct();">remove product</button>
+    <div id='cart'></div>
+</body>
+
+<script>
+
+    /**
+     * On button click add (or remove) random product to the cart and update total sum.
+     */
+    
+    function getCart(product) {
+        return {
+            products: [],
+            totalSum: 0,
+            addProduct: function(product) {
+                this.products.push(product);
+                this.updateSum();
+            },
+            removeProduct: function() {
+                if(this.products.length > 0) {
+                    this.products.pop();
+                }
+                this.updateSum();
+            },
+            updateSum: function() {
+                let sum = 0;
+                for(i in this.products) {
+                     sum += this.products[i].price;
+                }
+                this.totalSum = sum;
+            },
+            printProducts: function() {
+                document.getElementById('cart').innerHTML = '';
+                if(this.products.length == 0) {
+                    document.getElementById('cart').innerHTML += '<b>Cart is empty</b>';
+
+                } else {
+                    for(i in this.products) {
+                        document.getElementById('cart').innerHTML += this.products[i]['name'] + ' (' + this.products[i]['price'] + ' <s>Р</s>)<br>';
+                    }
+                    document.getElementById('cart').innerHTML += '<b>Total checkout sum: ' + this.totalSum + ' <s>Р</s></b>';
+                }
+            }
+        }
+    }
+    
+    function getRandomElement(array) {
+        return array[Math.floor(Math.random() * array.length)];
+    }
+    
+    function getRandomName() {
+        let productPrefixes = ['Эпический', 'Редкий', 'Легендарный', 'Необычный', 'Обычный'];
+        let productNames = ['фолиант', 'кодекс', 'окуляр', 'фиал', 'тотем', 'оберег', 'корень', 'зонт', 'талисман', 'котел', 'бластер', 'глаз', 'свиток', 'осколок', 'горшок', 'шлем'];
+        let productSuffixes = ['бесконечного', 'божественного', 'пылающего', 'брошенного', 'испуганного', 'небесного', 'дрессированного', 'ночного', 'игрушечного', 'злобного'];
+        let productPostfixes = ['умысла', 'дракона', 'гиппогрифа', 'мула', 'господства', 'пробудителя', 'гладиатора', 'обжорства', 'некроманта', 'кровососа', 'гения', 'клоуна', 'короля', 'писателя'];
+    
+        var name = getRandomElement(productPrefixes) + ' ' + getRandomElement(productNames) + ' ' + getRandomElement(productSuffixes) + ' ' + getRandomElement(productPostfixes);
+        return name;
+    }
+    
+    function getRandomNum() {
+        return Math.floor(Math.random() * 100) + 1;
+    }
+    
+    function getProduct() {
+        return {
+            name: getRandomName(),
+            price: getRandomNum(),
+        };
+    }
+    
+    function addProduct() {
+        let product = getProduct();
+        cart.addProduct(product);
+        cart.printProducts();
+    }
+    
+    function removeProduct() {
+        cart.removeProduct();
+        cart.printProducts();
+    }
+    
+    var cart = getCart();
+    cart.printProducts();
+    
+</script>
